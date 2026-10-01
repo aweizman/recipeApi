@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="RecipeDao">
+
+  <resultMap id="DbRecipeResult" type="DbRecipe">
+    <id property="recipeId" column="recipeId"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+    <result property="makes" column="makes"/>
+    <collection property="ingredients" ofType="DbIngredient" resultMap="DbIngredientResult" columnPrefix="ingredient_"/>
+  </resultMap>
+
+  <resultMap id="DbIngredientResult" type="DbIngredient">
+    <id property="ingredientId" column="uuid"/>
+    <id property="name" column="name"/>
+  </resultMap>
+
+  <select id="listRecipes" resultMap="DbRecipeResult">
+    SELECT
+      r.recipe_uuid AS recipeId,
+      r.name AS name,
+      r.description AS description,
+      r.makes AS makes,
+      i.ingredient_uuid AS ingredient_uuid,
+      i.name AS ingredient_name
+    FROM
+      recipe r
+      JOIN recipe_ingredient ri ON r.recipe_uuid = ri.recipe_uuid
+      JOIN ingredient i ON ri.ingredient_uuid = i.ingredient_uuid
+  </select>
+</mapper>
