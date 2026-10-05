@@ -24,7 +24,7 @@ public final class Server {
     var versionProperties = loadVersionProperties();
     var version = versionProperties.getProperty(VERSION);
 
-    var spark = Service.ignite().ipAddress("localhost").port(8080);
+    var spark = Service.ignite().port(8080);
     SparkSwagger.of(spark, Options.defaultOptions().version(version).build())
         .endpoints(() -> List.of(recipeRouteGroup))
         .generateDoc();
